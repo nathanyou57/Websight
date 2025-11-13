@@ -3,273 +3,639 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Whack-A-Mole Pro | Premium Gaming Experience</title>
-    <link rel="stylesheet" href="style.css" />
+    <title>Samuel Benardo — About</title>
+    <meta
+      name="description"
+      content="About Samuel (Sam) Benardo — Soccer, Cello, Filmmaking & Advocacy."
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="site.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='52' font-size='52'>🎻</text></svg>"
+    />
   </head>
   <body>
-    <div class="stars"></div>
-    <div class="twinkling"></div>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="index.html">
+          <span class="brand-mark" aria-hidden="true">SB</span>
+          <span class="brand-text">Samuel&nbsp;Benardo</span>
+        </a>
+        <nav class="nav" aria-label="Main Navigation">
+          <button
+            class="nav-toggle"
+            aria-expanded="false"
+            aria-controls="nav-menu"
+          >
+            <span class="bars"></span><span class="sr-only">Menu</span>
+          </button>
+          <ul id="nav-menu" class="nav-menu">
+            <li><a class="nav-link active" href="index.html">About</a></li>
+            <li class="has-dropdown">
+              <button class="nav-link dropdown-toggle" aria-expanded="false">
+                Sections
+              </button>
+              <ul class="dropdown" role="menu">
+                <li role="none">
+                  <a role="menuitem" href="#athletics" class="dropdown-link"
+                    >Athletics</a
+                  >
+                </li>
+                <li role="none">
+                  <a role="menuitem" href="#music" class="dropdown-link"
+                    >Music & Arts</a
+                  >
+                </li>
+                <li role="none">
+                  <a role="menuitem" href="#advocacy" class="dropdown-link"
+                    >Creative & Advocacy</a
+                  >
+                </li>
+                <li role="none">
+                  <a role="menuitem" href="#gallery" class="dropdown-link"
+                    >Gallery</a
+                  >
+                </li>
+                <li role="none">
+                  <a role="menuitem" href="#summary" class="dropdown-link"
+                    >Snapshot</a
+                  >
+                </li>
+                <li role="none">
+                  <a role="menuitem" href="#media" class="dropdown-link"
+                    >Media & References</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li><a class="nav-link" href="projects.html">Projects</a></li>
+            <li>
+              <button
+                class="nav-link icon-btn"
+                id="theme-toggle"
+                title="Toggle theme"
+                aria-label="Toggle theme"
+              >
+                🌓
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
 
-    <div class="container">
-      <header class="game-header">
-        <h1 class="game-title">
-          <span class="title-icon">🎯</span>
-          WHACK-A-MOLE
-          <span class="title-subtitle">PRO EDITION</span>
-        </h1>
-      </header>
-
-      <div class="game-stats">
-        <div class="stat-card score-card">
-          <div class="stat-label">SCORE</div>
-          <div class="stat-value" id="score">0</div>
-          <div class="stat-streak" id="streak-display"></div>
-        </div>
-        <div class="stat-card timer-card">
-          <div class="stat-label">TIME</div>
-          <div class="stat-value" id="timer">60</div>
-          <div class="progress-ring">
-            <svg class="progress-ring-svg" width="120" height="120">
-              <circle
-                class="progress-ring-circle-bg"
-                stroke="#ffffff15"
-                stroke-width="8"
-                fill="transparent"
-                r="52"
-                cx="60"
-                cy="60"
+    <main id="main">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <h1>Samuel (Sam) Benardo</h1>
+            <p class="subtitle">
+              Soccer Defender · Cellist · Filmmaker & Children’s Rights Advocate
+            </p>
+            <div class="meta">
+              <span class="chip">Class of 2026</span>
+              <span class="chip">Harvard‑Westlake School</span>
+              <span class="chip">Los Angeles, CA</span>
+            </div>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="projects.html">View Projects</a>
+              <a class="btn" href="#gallery">Open Gallery</a>
+              <button class="btn btn-ghost" id="share-btn">Share</button>
+              <a
+                class="btn btn-ghost"
+                href="assets/Samuel_Benardo_Profile.md"
+                download
+                >Download Profile.md</a
+              >
+            </div>
+          </div>
+          <div class="hero-media">
+            <div class="hero-image-card">
+              <img
+                src="https://static.hudl.com/users/prod/24898533_1cb58b2b8b61414e8bd9ecc01f5b78a6.jpg"
+                alt="Samuel Benardo soccer profile photo"
+                loading="eager"
               />
-              <circle
-                class="progress-ring-circle"
-                stroke="url(#gradient)"
-                stroke-width="8"
-                fill="transparent"
-                r="52"
-                cx="60"
-                cy="60"
+              <div class="image-caption">Varsity Defender · #16</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="section">
+        <div class="container">
+          <div class="cards-grid three">
+            <article class="card">
+              <h3>Basic Profile</h3>
+              <ul class="desc-list">
+                <li><strong>Name:</strong> Samuel (Sam) Benardo</li>
+                <li>
+                  <strong>Alias / Middle Names:</strong> Possibly “Leo Götz” (as
+                  listed in one project)
+                </li>
+                <li><strong>Class Year:</strong> 2026 (Upper School)</li>
+                <li>
+                  <strong>School:</strong> Harvard‑Westlake School, Studio City,
+                  California
+                </li>
+                <li><strong>Location:</strong> Los Angeles, CA</li>
+                <li>
+                  <strong>Fields:</strong> Soccer (Varsity Defender) · Cello
+                  (Chamber Orchestra) · Filmmaking & Advocacy
+                </li>
+                <li><strong>Languages:</strong> English</li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3>Quick Links</h3>
+              <ul class="link-list">
+                <li>
+                  <a
+                    href="https://www.hudl.com/profile/24898533/samuel-benardo"
+                    target="_blank"
+                    rel="noopener"
+                    >Hudl Profile</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="https://www.maxpreps.com/ca/studio-city/harvard-westlake-wolverines/athletes/samuel-bernardo/?careerid=fom4hd3lj8nff"
+                    target="_blank"
+                    rel="noopener"
+                    >MaxPreps Stats</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="https://hwchronicle.com/111534/features/joining-the-jam/"
+                    target="_blank"
+                    rel="noopener"
+                    >HW Chronicle Feature</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="https://sites.google.com/hw.com/lights-up/instrumental-music-program"
+                    target="_blank"
+                    rel="noopener"
+                    >Lights Up 2024 Program</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="https://filmfreeway.com/Here_For_You"
+                    target="_blank"
+                    rel="noopener"
+                    >FilmFreeway — Here For You</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="https://www.harmonyforpeace.org/copy-of-jr-peace-music-ambassador-2023"
+                    target="_blank"
+                    rel="noopener"
+                    >Harmony for Peace Foundation</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="https://www.palipost.com/palisadians-keep-gothia-cup-tradition/"
+                    target="_blank"
+                    rel="noopener"
+                    >Palisadians Post — Gothia Cup</a
+                  >
+                </li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3>Focus Areas</h3>
+              <div class="chips">
+                <span class="chip">Athletics</span>
+                <span class="chip">Music</span>
+                <span class="chip">Creative Arts</span>
+                <span class="chip">Advocacy</span>
+              </div>
+              <p class="note">
+                Credit name occasionally appears as
+                <em>Samuel Leo Götz Benardo</em>.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="gallery" class="section">
+        <div class="container">
+          <div class="section-head">
+            <h2>Gallery</h2>
+            <p>Tap any image to view full‑screen.</p>
+          </div>
+          <div class="masonry">
+            <a
+              class="masonry-item lightbox"
+              href="https://static.hudl.com/users/prod/24898533_1cb58b2b8b61414e8bd9ecc01f5b78a6.jpg"
+              data-caption="Hudl profile photo"
+            >
+              <img
+                src="https://static.hudl.com/users/prod/24898533_1cb58b2b8b61414e8bd9ecc01f5b78a6.jpg"
+                alt="Hudl profile photo"
+                loading="lazy"
               />
-              <defs>
-                <linearGradient
-                  id="gradient"
-                  x1="0%"
-                  y1="0%"
-                  x2="100%"
-                  y2="100%"
-                >
-                  <stop
-                    offset="0%"
-                    style="stop-color: #667eea; stop-opacity: 1"
-                  />
-                  <stop
-                    offset="100%"
-                    style="stop-color: #764ba2; stop-opacity: 1"
-                  />
-                </linearGradient>
-              </defs>
-            </svg>
+            </a>
+            <a
+              class="masonry-item lightbox"
+              href="https://image.maxpreps.io/careers/0/d/f/0dfe211d-dbaf-4b7d-9327-47e97dc91895/thumbnail.jpg?version=638700558483901006"
+              data-caption="MaxPreps thumbnail"
+            >
+              <img
+                src="https://image.maxpreps.io/careers/0/d/f/0dfe211d-dbaf-4b7d-9327-47e97dc91895/thumbnail.jpg?version=638700558483901006"
+                alt="MaxPreps thumbnail"
+                loading="lazy"
+              />
+            </a>
+            <a
+              class="masonry-item lightbox"
+              href="https://static.wixstatic.com/media/21899c_32e36e92e82346c6b1fda3c82892d029~mv2.jpg/v1/fill/w_195%2Ch_260%2Cal_c%2Cq_80%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/21899c_32e36e92e82346c6b1fda3c82892d029~mv2.jpg"
+              data-caption="Wixstatic image"
+            >
+              <img
+                src="https://static.wixstatic.com/media/21899c_32e36e92e82346c6b1fda3c82892d029~mv2.jpg/v1/fill/w_195%2Ch_260%2Cal_c%2Cq_80%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/21899c_32e36e92e82346c6b1fda3c82892d029~mv2.jpg"
+                alt="Wixstatic image"
+                loading="lazy"
+              />
+            </a>
+            <a
+              class="masonry-item lightbox"
+              href="https://filmfreeway-production-storage-01-connector.filmfreeway.com/attachments/files/009/036/137/original/bomben_Einschlag.jpg?1738904238="
+              data-caption="FilmFreeway still"
+            >
+              <img
+                src="https://filmfreeway-production-storage-01-connector.filmfreeway.com/attachments/files/009/036/137/original/bomben_Einschlag.jpg?1738904238="
+                alt="FilmFreeway still"
+                loading="lazy"
+              />
+            </a>
+            <a
+              class="masonry-item lightbox"
+              href="https://filmfreeway-production-storage-01-connector.filmfreeway.com/press_kits/posters/002/974/659/original/6b62115811-poster.jpg?1737222429="
+              data-caption="Here For You poster"
+            >
+              <img
+                src="https://filmfreeway-production-storage-01-connector.filmfreeway.com/press_kits/posters/002/974/659/original/6b62115811-poster.jpg?1737222429="
+                alt="Here For You poster"
+                loading="lazy"
+              />
+            </a>
           </div>
         </div>
-        <div class="stat-card highscore-card">
-          <div class="stat-label">HIGH SCORE</div>
-          <div class="stat-value" id="highscore">0</div>
-          <div class="stat-icon">👑</div>
-        </div>
-      </div>
+      </section>
 
-      <div class="difficulty-selector" id="difficulty-selector">
-        <h2 class="difficulty-title">Select Difficulty</h2>
-        <div class="difficulty-buttons">
-          <button class="difficulty-btn easy" data-difficulty="easy">
-            <span class="diff-icon">😊</span>
-            <span class="diff-name">EASY</span>
-            <span class="diff-desc">Slow & Relaxed</span>
-          </button>
-          <button class="difficulty-btn medium" data-difficulty="medium">
-            <span class="diff-icon">😎</span>
-            <span class="diff-name">MEDIUM</span>
-            <span class="diff-desc">Balanced Challenge</span>
-          </button>
-          <button class="difficulty-btn hard" data-difficulty="hard">
-            <span class="diff-icon">😤</span>
-            <span class="diff-name">HARD</span>
-            <span class="diff-desc">Lightning Fast</span>
-          </button>
+      <section id="athletics" class="section">
+        <div class="container">
+          <div class="section-head"><h2>Athletics — Soccer</h2></div>
+          <div class="cards-grid two">
+            <article class="card">
+              <ul class="desc-list">
+                <li>
+                  <strong>Team:</strong> Harvard‑Westlake Varsity Boys Soccer
+                  (#16, Defender)
+                </li>
+                <li>
+                  <strong>Record (2024 Season):</strong> 17‑5‑2 overall, 7‑2‑1
+                  in league (2nd place)
+                </li>
+                <li>
+                  <strong>Stats (2024‑25):</strong> 1 point, 1 assist (as of
+                  Feb 4 2025)
+                </li>
+                <li><strong>Class:</strong> Senior, Class of 2026</li>
+                <li>
+                  <strong>Club:</strong> Santa Monica Surf Soccer Club BU16
+                </li>
+                <li>
+                  <strong>Highlight:</strong> 2024 Gothia Cup
+                  (Gothenburg, Sweden) — Round of 16
+                </li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3>Profiles</h3>
+              <ul class="link-list">
+                <li>
+                  <a
+                    href="https://www.maxpreps.com/ca/studio-city/harvard-westlake-wolverines/athletes/samuel-bernardo/?careerid=fom4hd3lj8nff"
+                    target="_blank"
+                    rel="noopener"
+                    >MaxPreps Profile</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="https://www.hudl.com/profile/24898533/samuel-benardo"
+                    target="_blank"
+                    rel="noopener"
+                    >Hudl Profile</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="https://www.palipost.com/palisadians-keep-gothia-cup-tradition/"
+                    target="_blank"
+                    rel="noopener"
+                    >Palisadians Post — Gothia Cup</a
+                  >
+                </li>
+              </ul>
+            </article>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div class="game-board" id="game-board">
-        <div class="hole" data-index="0">
-          <div class="mole">
-            <div class="mole-head">
-              <div class="mole-eyes">
-                <div class="eye left"></div>
-                <div class="eye right"></div>
-              </div>
-              <div class="mole-nose"></div>
-              <div class="mole-mouth"></div>
-            </div>
+      <section id="music" class="section">
+        <div class="container">
+          <div class="section-head"><h2>Music & Arts — Cello</h2></div>
+          <div class="cards-grid two">
+            <article class="card">
+              <ul class="desc-list">
+                <li><strong>Instrument:</strong> Cello</li>
+                <li>
+                  <strong>Programs:</strong> Upper School Chamber Orchestra ·
+                  Jazz Trio (outside school)
+                </li>
+              </ul>
+              <h3 class="subhead">Events</h3>
+              <ul class="link-list">
+                <li>
+                  <a
+                    href="https://sites.google.com/hw.com/lights-up/instrumental-music-program"
+                    target="_blank"
+                    rel="noopener"
+                    >Lights Up 2024 — Instrumental Music Program</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="https://hwchronicle.com/111534/features/joining-the-jam/"
+                    target="_blank"
+                    rel="noopener"
+                    >Joining the Jam — HW Chronicle Feature (May 28 2025)</a
+                  >
+                </li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3>Quotes</h3>
+              <blockquote>
+                “Stage fright was a hurdle I had and will continue to have to
+                overcome. In the hot pot of stress that Harvard‑Westlake can
+                sometimes be, the ability to steel your nerves in difficult
+                times has proven a very valuable skill.”
+              </blockquote>
+              <blockquote>
+                “If more resources were put into the program … more students
+                would be interested in buying into the program.”
+              </blockquote>
+            </article>
           </div>
-          <div class="hole-front"></div>
         </div>
-        <div class="hole" data-index="1">
-          <div class="mole">
-            <div class="mole-head">
-              <div class="mole-eyes">
-                <div class="eye left"></div>
-                <div class="eye right"></div>
-              </div>
-              <div class="mole-nose"></div>
-              <div class="mole-mouth"></div>
-            </div>
-          </div>
-          <div class="hole-front"></div>
-        </div>
-        <div class="hole" data-index="2">
-          <div class="mole">
-            <div class="mole-head">
-              <div class="mole-eyes">
-                <div class="eye left"></div>
-                <div class="eye right"></div>
-              </div>
-              <div class="mole-nose"></div>
-              <div class="mole-mouth"></div>
-            </div>
-          </div>
-          <div class="hole-front"></div>
-        </div>
-        <div class="hole" data-index="3">
-          <div class="mole">
-            <div class="mole-head">
-              <div class="mole-eyes">
-                <div class="eye left"></div>
-                <div class="eye right"></div>
-              </div>
-              <div class="mole-nose"></div>
-              <div class="mole-mouth"></div>
-            </div>
-          </div>
-          <div class="hole-front"></div>
-        </div>
-        <div class="hole" data-index="4">
-          <div class="mole">
-            <div class="mole-head">
-              <div class="mole-eyes">
-                <div class="eye left"></div>
-                <div class="eye right"></div>
-              </div>
-              <div class="mole-nose"></div>
-              <div class="mole-mouth"></div>
-            </div>
-          </div>
-          <div class="hole-front"></div>
-        </div>
-        <div class="hole" data-index="5">
-          <div class="mole">
-            <div class="mole-head">
-              <div class="mole-eyes">
-                <div class="eye left"></div>
-                <div class="eye right"></div>
-              </div>
-              <div class="mole-nose"></div>
-              <div class="mole-mouth"></div>
-            </div>
-          </div>
-          <div class="hole-front"></div>
-        </div>
-        <div class="hole" data-index="6">
-          <div class="mole">
-            <div class="mole-head">
-              <div class="mole-eyes">
-                <div class="eye left"></div>
-                <div class="eye right"></div>
-              </div>
-              <div class="mole-nose"></div>
-              <div class="mole-mouth"></div>
-            </div>
-          </div>
-          <div class="hole-front"></div>
-        </div>
-        <div class="hole" data-index="7">
-          <div class="mole">
-            <div class="mole-head">
-              <div class="mole-eyes">
-                <div class="eye left"></div>
-                <div class="eye right"></div>
-              </div>
-              <div class="mole-nose"></div>
-              <div class="mole-mouth"></div>
-            </div>
-          </div>
-          <div class="hole-front"></div>
-        </div>
-        <div class="hole" data-index="8">
-          <div class="mole">
-            <div class="mole-head">
-              <div class="mole-eyes">
-                <div class="eye left"></div>
-                <div class="eye right"></div>
-              </div>
-              <div class="mole-nose"></div>
-              <div class="mole-mouth"></div>
-            </div>
-          </div>
-          <div class="hole-front"></div>
-        </div>
-      </div>
+      </section>
 
-      <div class="control-panel">
-        <button class="game-btn start-btn" id="start-btn">
-          <span class="btn-icon">▶</span>
-          START GAME
-        </button>
-        <button class="game-btn reset-btn" id="reset-btn">
-          <span class="btn-icon">↻</span>
-          RESET
-        </button>
-      </div>
-
-      <div class="game-over-modal" id="game-over-modal">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h2 class="modal-title">GAME OVER!</h2>
+      <section id="advocacy" class="section">
+        <div class="container">
+          <div class="section-head">
+            <h2>Creative & Advocacy Project — “Here For You” (2025)</h2>
           </div>
-          <div class="modal-body">
-            <div class="final-score-display">
-              <div class="final-score-label">Final Score</div>
-              <div class="final-score-value" id="final-score">0</div>
-            </div>
-            <div class="performance-stats">
-              <div class="perf-stat">
-                <span class="perf-icon">🎯</span>
-                <span class="perf-label">Accuracy:</span>
-                <span class="perf-value" id="accuracy">0%</span>
-              </div>
-              <div class="perf-stat">
-                <span class="perf-icon">⚡</span>
-                <span class="perf-label">Best Streak:</span>
-                <span class="perf-value" id="best-streak">0</span>
-              </div>
-            </div>
-            <div class="achievement" id="achievement"></div>
-          </div>
-          <div class="modal-footer">
-            <button class="modal-btn play-again-btn" id="play-again-btn">
-              <span class="btn-icon">▶</span>
-              PLAY AGAIN
-            </button>
+          <div class="cards-grid two">
+            <article class="card">
+              <ul class="desc-list">
+                <li><strong>Roles:</strong> Writer · Director · Producer</li>
+                <li><strong>Credit Name:</strong> Samuel Leo Götz Benardo</li>
+                <li>
+                  <strong>Themes:</strong> Music & Children’s Rights Advocacy
+                </li>
+                <li>
+                  <strong>Project Link:</strong>
+                  <a
+                    href="https://filmfreeway.com/Here_For_You"
+                    target="_blank"
+                    rel="noopener"
+                    >FilmFreeway — Here For You</a
+                  >
+                </li>
+                <li>
+                  <strong>Recognition:</strong> Featured by the Harmony for
+                  Peace Foundation as a Junior Peace Music Ambassador —
+                  <a
+                    href="https://www.harmonyforpeace.org/copy-of-jr-peace-music-ambassador-2023"
+                    target="_blank"
+                    rel="noopener"
+                    >Foundation Profile</a
+                  >
+                </li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3>Description Excerpts</h3>
+              <p>
+                “Born in 2008, Samuel has been playing the cello since he was
+                five years old. Alongside composing music, he has a deep love
+                for soccer … playing with both his club team and the Varsity
+                team at Harvard‑Westlake High School in California.”
+              </p>
+              <p>
+                “A call to action for stronger worldwide children’s rights.”
+              </p>
+            </article>
           </div>
         </div>
+      </section>
+
+      <section id="quotes" class="section">
+        <div class="container">
+          <div class="section-head"><h2>Quotes & Reflections</h2></div>
+          <div class="cards-grid one">
+            <article class="card">
+              <blockquote>
+                “Stage fright was a hurdle I had … the ability to steel your nerves in difficult times has proven a very valuable skill.”
+                — Harvard‑Westlake Chronicle (2025)
+              </blockquote>
+              <blockquote>
+                “The music scene is under‑represented in people who strive to make music a core part of their identity.”
+                — Harvard‑Westlake Chronicle (2025)
+              </blockquote>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="summary" class="section">
+        <div class="container">
+          <div class="section-head"><h2>Summary Snapshot</h2></div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <tbody>
+                <tr>
+                  <th>Name</th>
+                  <td>Samuel (Sam) Benardo</td>
+                </tr>
+                <tr>
+                  <th>Alias</th>
+                  <td>Leo Götz Benardo</td>
+                </tr>
+                <tr>
+                  <th>Class Year</th>
+                  <td>2026</td>
+                </tr>
+                <tr>
+                  <th>School</th>
+                  <td>Harvard‑Westlake School</td>
+                </tr>
+                <tr>
+                  <th>Location</th>
+                  <td>Los Angeles, CA</td>
+                </tr>
+                <tr>
+                  <th>Soccer Position</th>
+                  <td>Defender (#16)</td>
+                </tr>
+                <tr>
+                  <th>Club Team</th>
+                  <td>Santa Monica Surf BU16</td>
+                </tr>
+                <tr>
+                  <th>Music</th>
+                  <td>Cello</td>
+                </tr>
+                <tr>
+                  <th>Film Project</th>
+                  <td>Here For You (2025)</td>
+                </tr>
+                <tr>
+                  <th>Notable Event</th>
+                  <td>Gothia Cup (2024, Sweden)</td>
+                </tr>
+                <tr>
+                  <th>Languages</th>
+                  <td>English</td>
+                </tr>
+                <tr>
+                  <th>Focus Areas</th>
+                  <td>Athletics · Music · Creative Arts · Advocacy</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="media" class="section">
+        <div class="container">
+          <div class="section-head"><h2>Media & References</h2></div>
+          <ul class="link-list columns">
+            <li>
+              <a
+                href="https://www.hudl.com/profile/24898533/samuel-benardo"
+                target="_blank"
+                rel="noopener"
+                >Hudl Profile (Video)</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://www.maxpreps.com/ca/studio-city/harvard-westlake-wolverines/athletes/samuel-bernardo/?careerid=fom4hd3lj8nff"
+                target="_blank"
+                rel="noopener"
+                >MaxPreps Profile (Stats)</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://hwchronicle.com/111534/features/joining-the-jam/"
+                target="_blank"
+                rel="noopener"
+                >Harvard‑Westlake Chronicle Feature</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://sites.google.com/hw.com/lights-up/instrumental-music-program"
+                target="_blank"
+                rel="noopener"
+                >Lights Up 2024 Program</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://filmfreeway.com/Here_For_You"
+                target="_blank"
+                rel="noopener"
+                >FilmFreeway — Here For You</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://www.harmonyforpeace.org/copy-of-jr-peace-music-ambassador-2023"
+                target="_blank"
+                rel="noopener"
+                >Harmony for Peace Foundation Profile</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://www.palipost.com/palisadians-keep-gothia-cup-tradition/"
+                target="_blank"
+                rel="noopener"
+                >Pali Post — Gothia Cup Article</a
+              >
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <p class="small">© <span id="year"></span> Samuel Benardo</p>
+          <p class="small">
+            Style inspired by HW Admin UI —
+            <a
+              href="https://learnhw.web.app/admin"
+              target="_blank"
+              rel="noopener"
+              >learnhw.web.app/admin</a
+            >
+          </p>
+          <p class="small">Compiled October 2025 from public sources.</p>
+        </div>
+        <div class="footer-actions">
+          <a class="btn btn-primary" href="projects.html">Projects</a>
+          <a class="btn" href="#top" id="back-to-top">Back to top</a>
+        </div>
       </div>
+    </footer>
+
+    <div
+      id="lightbox"
+      class="lightbox"
+      aria-hidden="true"
+      role="dialog"
+      aria-label="Image viewer"
+    >
+      <button class="lightbox-close" aria-label="Close">×</button>
+      <img class="lightbox-image" alt="Expanded media" />
+      <div class="lightbox-caption"></div>
     </div>
 
-    <div class="particles" id="particles"></div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-    <script src="script.js"></script>
+    <script src="site.js"></script>
   </body>
 </html>

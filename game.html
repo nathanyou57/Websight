@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Whack-A-Mole Pro | Premium Gaming Experience</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+
+    <div class="container">
+      <header class="game-header">
+        <h1 class="game-title">
+          <span class="title-icon">🎯</span>
+          WHACK-A-MOLE
+          <span class="title-subtitle">PRO EDITION</span>
+        </h1>
+      </header>
+
+      <div class="game-stats">
+        <div class="stat-card score-card">
+          <div class="stat-label">SCORE</div>
+          <div class="stat-value" id="score">0</div>
+          <div class="stat-streak" id="streak-display"></div>
+        </div>
+        <div class="stat-card timer-card">
+          <div class="stat-label">TIME</div>
+          <div class="stat-value" id="timer">60</div>
+          <div class="progress-ring">
+            <svg class="progress-ring-svg" width="120" height="120">
+              <circle
+                class="progress-ring-circle-bg"
+                stroke="#ffffff15"
+                stroke-width="8"
+                fill="transparent"
+                r="52"
+                cx="60"
+                cy="60"
+              />
+              <circle
+                class="progress-ring-circle"
+                stroke="url(#gradient)"
+                stroke-width="8"
+                fill="transparent"
+                r="52"
+                cx="60"
+                cy="60"
+              />
+              <defs>
+                <linearGradient
+                  id="gradient"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop
+                    offset="0%"
+                    style="stop-color: #667eea; stop-opacity: 1"
+                  />
+                  <stop
+                    offset="100%"
+                    style="stop-color: #764ba2; stop-opacity: 1"
+                  />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+        <div class="stat-card highscore-card">
+          <div class="stat-label">HIGH SCORE</div>
+          <div class="stat-value" id="highscore">0</div>
+          <div class="stat-icon">👑</div>
+        </div>
+      </div>
+
+      <div class="difficulty-selector" id="difficulty-selector">
+        <h2 class="difficulty-title">Select Difficulty</h2>
+        <div class="difficulty-buttons">
+          <button class="difficulty-btn easy" data-difficulty="easy">
+            <span class="diff-icon">😊</span>
+            <span class="diff-name">EASY</span>
+            <span class="diff-desc">Slow & Relaxed</span>
+          </button>
+          <button class="difficulty-btn medium" data-difficulty="medium">
+            <span class="diff-icon">😎</span>
+            <span class="diff-name">MEDIUM</span>
+            <span class="diff-desc">Balanced Challenge</span>
+          </button>
+          <button class="difficulty-btn hard" data-difficulty="hard">
+            <span class="diff-icon">😤</span>
+            <span class="diff-name">HARD</span>
+            <span class="diff-desc">Lightning Fast</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="game-board" id="game-board">
+        <div class="hole" data-index="0">
+          <div class="mole">
+            <div class="mole-head">
+              <div class="mole-eyes">
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+              </div>
+              <div class="mole-nose"></div>
+              <div class="mole-mouth"></div>
+            </div>
+          </div>
+          <div class="hole-front"></div>
+        </div>
+        <div class="hole" data-index="1">
+          <div class="mole">
+            <div class="mole-head">
+              <div class="mole-eyes">
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+              </div>
+              <div class="mole-nose"></div>
+              <div class="mole-mouth"></div>
+            </div>
+          </div>
+          <div class="hole-front"></div>
+        </div>
+        <div class="hole" data-index="2">
+          <div class="mole">
+            <div class="mole-head">
+              <div class="mole-eyes">
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+              </div>
+              <div class="mole-nose"></div>
+              <div class="mole-mouth"></div>
+            </div>
+          </div>
+          <div class="hole-front"></div>
+        </div>
+        <div class="hole" data-index="3">
+          <div class="mole">
+            <div class="mole-head">
+              <div class="mole-eyes">
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+              </div>
+              <div class="mole-nose"></div>
+              <div class="mole-mouth"></div>
+            </div>
+          </div>
+          <div class="hole-front"></div>
+        </div>
+        <div class="hole" data-index="4">
+          <div class="mole">
+            <div class="mole-head">
+              <div class="mole-eyes">
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+              </div>
+              <div class="mole-nose"></div>
+              <div class="mole-mouth"></div>
+            </div>
+          </div>
+          <div class="hole-front"></div>
+        </div>
+        <div class="hole" data-index="5">
+          <div class="mole">
+            <div class="mole-head">
+              <div class="mole-eyes">
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+              </div>
+              <div class="mole-nose"></div>
+              <div class="mole-mouth"></div>
+            </div>
+          </div>
+          <div class="hole-front"></div>
+        </div>
+        <div class="hole" data-index="6">
+          <div class="mole">
+            <div class="mole-head">
+              <div class="mole-eyes">
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+              </div>
+              <div class="mole-nose"></div>
+              <div class="mole-mouth"></div>
+            </div>
+          </div>
+          <div class="hole-front"></div>
+        </div>
+        <div class="hole" data-index="7">
+          <div class="mole">
+            <div class="mole-head">
+              <div class="mole-eyes">
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+              </div>
+              <div class="mole-nose"></div>
+              <div class="mole-mouth"></div>
+            </div>
+          </div>
+          <div class="hole-front"></div>
+        </div>
+        <div class="hole" data-index="8">
+          <div class="mole">
+            <div class="mole-head">
+              <div class="mole-eyes">
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+              </div>
+              <div class="mole-nose"></div>
+              <div class="mole-mouth"></div>
+            </div>
+          </div>
+          <div class="hole-front"></div>
+        </div>
+      </div>
+
+      <div class="control-panel">
+        <button class="game-btn start-btn" id="start-btn">
+          <span class="btn-icon">▶</span>
+          START GAME
+        </button>
+        <button class="game-btn reset-btn" id="reset-btn">
+          <span class="btn-icon">↻</span>
+          RESET
+        </button>
+      </div>
+
+      <div class="difficulty-selector" id="player-settings">
+        <h2 class="difficulty-title" style="margin-bottom: 16px">Player</h2>
+        <label style="display: block">
+          <span style="opacity: 0.8; font-size: 0.9rem"
+            >Name (for leaderboard):</span
+          >
+          <input
+            id="player-name"
+            type="text"
+            maxlength="20"
+            placeholder="Your name"
+            style="
+              margin-top: 8px;
+              padding: 10px 12px;
+              border-radius: 12px;
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              width: 100%;
+              background: rgba(255, 255, 255, 0.05);
+              color: #fff;
+            "
+          />
+        </label>
+      </div>
+
+      <div class="difficulty-selector" id="leaderboard">
+        <h2 class="difficulty-title" style="margin-bottom: 16px">
+          Leaderboard (Top 10)
+        </h2>
+        <ul
+          id="leaderboard-list"
+          style="list-style: none; padding: 0; display: grid; gap: 8px"
+        ></ul>
+        <div id="leaderboard-empty" style="opacity: 0.75; font-size: 0.9rem">
+          Accept cookies to enable the global leaderboard.
+        </div>
+      </div>
+
+      <div class="game-over-modal" id="game-over-modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title">GAME OVER!</h2>
+          </div>
+          <div class="modal-body">
+            <div class="final-score-display">
+              <div class="final-score-label">Final Score</div>
+              <div class="final-score-value" id="final-score">0</div>
+            </div>
+            <div class="performance-stats">
+              <div class="perf-stat">
+                <span class="perf-icon">🎯</span>
+                <span class="perf-label">Accuracy:</span>
+                <span class="perf-value" id="accuracy">0%</span>
+              </div>
+              <div class="perf-stat">
+                <span class="perf-icon">⚡</span>
+                <span class="perf-label">Best Streak:</span>
+                <span class="perf-value" id="best-streak">0</span>
+              </div>
+            </div>
+            <div class="achievement" id="achievement"></div>
+          </div>
+          <div class="modal-footer">
+            <button class="modal-btn play-again-btn" id="play-again-btn">
+              <span class="btn-icon">▶</span>
+              PLAY AGAIN
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="particles" id="particles"></div>
+
+    <script src="site.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="firebase-init.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
