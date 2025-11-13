@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>File Permissions</title>
+    <style>
+      body { font-family: "Times New Roman", Times, serif; background: #ffffff; color: #000000; margin: 24px; line-height: 1.55; }
+      main { max-width: 900px; margin: 0 auto; }
+      h1, h2, h3 { font-weight: bold; }
+      h1 { font-size: 36px; margin: 0 0 12px; }
+      h2 { font-size: 24px; margin: 28px 0 10px; }
+      h3 { font-size: 18px; margin: 18px 0 8px; }
+      p { margin: 10px 0; }
+      ul { margin: 8px 0 8px 24px; }
+      code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+      hr { border: none; border-top: 1px solid #000; margin: 24px 0; }
+      .small { font-size: 14px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>File Permissions</h1>
+        <p class="small"><strong>Before you start:</strong> Know what a <em>file</em> and a <em>folder (directory)</em> are. If you have never used a terminal or command prompt, that’s ok — we keep the language plain and define every new term; commands are shown only to illustrate ideas, not to require you to run them.</p>
+      </header>
+
+      <section>
+        <h2>One Picture for Everything: A Campus</h2>
+        <p>Imagine a small campus. A <strong>file</strong> is a room with things inside. A <strong>directory</strong> is a hallway that organizes rooms by name. People carry badges. Every door checks three badge groups:</p>
+        <ul>
+          <li><strong>Owner</strong>: the person responsible for the room.</li>
+          <li><strong>Group</strong>: a team that can also get in.</li>
+          <li><strong>Others</strong>: everyone else on campus.</li>
+        </ul>
+        <p>Each door can allow three actions: <strong>read</strong> (look inside), <strong>write</strong> (change what’s inside), and <strong>execute</strong> (use the room to run an activity; on hallways it means you can pass through). We will keep expanding this same picture as new ideas appear, so nothing feels random.</p>
+      </section>
+
+      <section>
+        <h2>1) The Big Picture</h2>
+        <p><strong>File permissions</strong> are the rules that say who can do what to files and folders. “Who” is owner, group, and others. “What” is read, write, and execute. Linux and macOS follow this model everywhere. Windows uses a more detailed list, but the idea is the same: decide which actions are allowed for which people.</p>
+      </section>
+
+      <section>
+        <h2>2) Classic Unix Model (r, w, x)</h2>
+        <p>Each room has an owner, a team (group), and three sets of switches for <strong>read</strong> (r), <strong>write</strong> (w), and <strong>execute</strong> (x) — one set for owner, one for group, one for others. You might see this written as <code>-rwxr-x---</code>, which means: owner = read+write+execute, group = read+execute, others = no access.</p>
+        <p>Changing rules (examples for context):</p>
+        <ul>
+          <li><strong>chmod</strong> (change mode): <code>chmod u+rwx,g+rx,o-rwx file</code> edits switches for user (u), group (g), and others (o).</li>
+          <li><strong>chown</strong> (change owner): <code>sudo chown alice:engineers file</code> sets both the owner (<code>alice</code>) and the owner group (<code>engineers</code>).</li>
+          <li><strong>chgrp</strong> (change group): <code>chgrp engineers file</code> sets only the group.</li>
+        </ul>
+        <p><em>About the colon:</em> In <code>chown alice:engineers file</code>, the <code>:</code> separates user and group. It sets the file’s owner and its group; it does not change Alice’s personal group memberships.</p>
+      </section>
+
+      <section>
+        <h2>3) Octal Shorthand (Numbers like 755)</h2>
+        <p>Each set of switches can be written as one digit: r=4, w=2, x=1. Add them: 7=rwx (4+2+1), 5=r‑x (4+1), 6=rw‑ (4+2), 0=---. The three digits go in order: owner, group, others. Example: <code>chmod 750 file</code> gives owner=7 (rwx), group=5 (r‑x), others=0 (---).</p>
+      </section>
+
+      <section>
+        <h2>4) Files vs Directories (Rooms vs Hallways)</h2>
+        <ul>
+          <li>On a <strong>file</strong>, execute means “you can run this.”</li>
+          <li>On a <strong>directory</strong>, execute means “you may enter/traverse this hallway if you already know a room name.”</li>
+          <li>On a directory, read lets you list names; write lets you add, rename, or remove entries inside.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>5) Defaults and Umask (The Door Stencil)</h2>
+        <p>When a new room appears, the system starts from a generous template and then removes certain permissions using a <strong>mask</strong> called the <strong>umask</strong> (user file‑creation mode mask).</p>
+        <ul>
+          <li>Show symbolic umask: <code>umask -S</code> (e.g., <code>u=rwx,g=rx,o=rx</code>).</li>
+          <li>Set umask (symbols): <code>umask u=rwx,g=rx,o=</code> (typically yields files ~640 and directories ~750).</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>6) Special Bits (Stickers on Doors)</h2>
+        <ul>
+          <li><strong>setuid</strong>: when you “run the room,” you act with the owner’s badge. Set with <code>chmod u+s file</code> (octal adds 4<span aria-hidden="true">000</span>).</li>
+          <li><strong>setgid</strong>: on files, you act with the room’s team badge; on directories, new items inherit the directory’s group. Set with <code>chmod g+s path</code> (octal adds 2<span aria-hidden="true">000</span>).</li>
+          <li><strong>sticky bit</strong> (directories): in shared hallways, only the item’s owner (or admin) may remove/rename their own item, even if the hallway is world‑writable. Set with <code>chmod +t dir</code> (octal adds 1<span aria-hidden="true">000</span>).</li>
+        </ul>
+        <p>These stickers change how activities run and how shared spaces behave. Use them carefully.</p>
+      </section>
+
+      <section>
+        <h2>7) Extended Attributes and ACLs (Sticky Notes and Guest Passes)</h2>
+        <ul>
+          <li><strong>Extended attributes</strong>: small extra notes attached to a file (platform‑specific).</li>
+          <li><strong>ACLs (Access Control Lists)</strong>: per‑person or per‑team entries (e.g., <code>user:alex:rw-</code>) for fine control.</li>
+          <li><strong>ACL mask</strong>: a ceiling that limits all named entries; if the mask is <code>r-x</code>, no named entry can exceed <code>r-x</code>.</li>
+          <li><strong>Capital X</strong> in ACLs: grant execute only for directories or where execute already exists; useful when you apply rules to many items.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>8) Identity Details (Badges Under the Hood)</h2>
+        <ul>
+          <li><strong>UID</strong>: user number. <strong>GID</strong>: group number.</li>
+          <li><strong>Real</strong> vs <strong>effective</strong> identity: who you are vs whose badge you’re currently using.</li>
+          <li><strong>Supplementary groups</strong>: extra teams attached to your badge.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>9) Filesystems and Mount Options (Campus Wings)</h2>
+        <p>Different storage types (ext4, xfs, btrfs, APFS, NTFS) support different features. A wing can also post extra rules: <code>noexec</code> (don’t allow executing), <code>nosuid</code> (ignore setuid/setgid), <code>nodev</code> (treat device files as normal).</p>
+      </section>
+
+      <section>
+        <h2>10) Network Filesystems (Partner Campuses)</h2>
+        <ul>
+          <li><strong>NFS</strong>: maps identities across machines; often reduces remote admin to a harmless user (<em>root_squash</em>).</li>
+          <li><strong>SMB/CIFS</strong>: Windows‑style sharing that translates between Unix permissions and NTFS ACLs when crossing systems.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>11) Security Layers (Campus Safety Office)</h2>
+        <ul>
+          <li><strong>SELinux</strong>: labels processes and files and enforces a policy; even when rwx says “yes,” policy can say “no.”</li>
+          <li><strong>AppArmor</strong>: profiles that declare which paths and actions a program may use.</li>
+          <li><strong>Linux capabilities</strong>: small slices of admin power (for example, the ability to bind low ports).</li>
+          <li><strong>seccomp</strong>: a filter that limits what a program can ask the system to do.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>12) Containers and Orchestration (Vendors on Campus)</h2>
+        <p>Containers use the same Unix permission rules inside, but badge numbers can be remapped. Shared folders follow the host’s permissions. In Kubernetes, settings can specify which user/group numbers to use and how volumes inherit groups.</p>
+      </section>
+
+      <section>
+        <h2>13) Windows / NTFS (Detailed Guest Lists)</h2>
+        <ul>
+          <li>Per‑object ACLs with entries (ACEs) for users or groups.</li>
+          <li>Rights include Read, Write, Execute, Modify, Full Control; inheritance flows to child folders unless blocked.</li>
+          <li>Explicit Deny overrides allows; the owner (or admins) can change the ACL.</li>
+          <li>Tools: GUI Security tab; PowerShell <code>Get-Acl</code>/<code>Set-Acl</code>; CLI <code>icacls</code>.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>14) Cloud Storage and Apps (Cloud Campus)</h2>
+        <ul>
+          <li>Object stores (S3, GCS, Azure) combine account/project policies (roles) with bucket/object ACLs.</li>
+          <li>Apps like Drive/Dropbox add sharing links and organization‑wide rules.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>15) Effective Access (What Actually Happens)</h2>
+        <p>Real access is the combination of door rules (rwx), guest passes (ACLs), the ceiling (ACL mask), wing rules (mount options), and safety policies (SELinux/AppArmor, capabilities, seccomp). Any layer can veto the final result.</p>
+      </section>
+
+      <section>
+        <h2>16) Safer Setups and Pitfalls</h2>
+        <ul>
+          <li>Grant only what’s needed (least privilege). Prefer groups over per‑person rules.</li>
+          <li>Unix: <code>755</code> public, <code>750</code> team, <code>700</code> private. Avoid <code>777</code> unless it’s a sticky directory made for sharing.</li>
+          <li>Shared trees: setgid on the top directory so new items inherit the team; add default ACLs for consistency.</li>
+          <li>Windows: avoid “Everyone: Full Control.” Use groups, let inheritance carry most permissions; use Deny sparingly.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>17) Quick Reference (Unix)</h2>
+        <ul>
+          <li>See: <code>ls -l</code>; walk each part: <code>namei -l path</code>.</li>
+          <li>Change: <code>chmod u=rw,g=r,o= file</code> or <code>chmod 640 file</code>.</li>
+          <li>Owner/group: <code>chown alice:dev file</code>; <code>chgrp dev file</code>.</li>
+          <li>ACLs: <code>getfacl file</code>; <code>setfacl -m u:alice:rw file</code>; default on dir: <code>setfacl -m d:g:dev:rwX dir/</code>.</li>
+          <li>Special bits: <code>chmod 4755 file</code> (setuid); <code>chmod 2755 dir</code> (setgid); <code>chmod 1777 shared</code> (sticky).</li>
+          <li>Find risks: <code>find . -perm -0002</code> (world‑writable); <code>find . -perm -4000</code> (setuid).</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>18) Quick Reference (Windows)</h2>
+        <ul>
+          <li>View/edit: <code>icacls .</code>; grant: <code>icacls file /grant "Engineering:(RX,M)"</code>; remove inheritance: <code>icacls file /inheritance:r</code>.</li>
+          <li>PowerShell: <code>Get-Acl</code>, <code>Set-Acl</code>.</li>
+          <li>Check effective access with Advanced Security Settings (GUI).</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>19) Practice</h2>
+        <ul>
+          <li><strong>Team share (Unix)</strong>: make a group‑owned directory; enable setgid on it; add default ACLs so new items match.</li>
+          <li><strong>Public web dir (Unix)</strong>: hallway open to read/traverse by all; only you can write.</li>
+          <li><strong>Temp scratch (Unix)</strong>: shared world‑writable hallway with sticky bit so no one can delete others’ files.</li>
+          <li><strong>Read‑only handouts (Windows)</strong>: “Students” can read; “Staff” can modify; remove “Everyone.”</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Common Mix‑ups</h2>
+        <p>Renaming a project in a Git app is usually not about sticky bits or filesystem permissions. Renaming a local folder needs write/execute on the parent directory; renaming a hosted repository depends on your role on that service and may require updating the remote URL locally.</p>
+      </section>
+
+      <hr />
+      <footer class="small">
+        <p>© <span id="year"></span>. Plain, readable version — black Times New Roman on white.</p>
+        <script>
+          document.getElementById('year').textContent = new Date().getFullYear();
+        </script>
+      </footer>
+    </main>
+  </body>
+  </html>
+
+

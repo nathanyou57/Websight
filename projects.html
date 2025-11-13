@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Projects — Samuel Benardo</title>
+    <meta
+      name="description"
+      content="Projects by Samuel (Sam) Benardo — including Whack‑A‑Mole Pro."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="site.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="index.html"
+          ><span class="brand-mark">SB</span
+          ><span class="brand-text">Samuel&nbsp;Benardo</span></a
+        >
+        <nav class="nav" aria-label="Main Navigation">
+          <button
+            class="nav-toggle"
+            aria-expanded="false"
+            aria-controls="nav-menu"
+          >
+            <span class="bars"></span><span class="sr-only">Menu</span>
+          </button>
+          <ul id="nav-menu" class="nav-menu">
+            <li><a class="nav-link" href="index.html">About</a></li>
+            <li>
+              <a class="nav-link active" href="projects.html">Projects</a>
+            </li>
+            <li>
+              <button
+                class="nav-link icon-btn"
+                id="theme-toggle"
+                title="Toggle theme"
+                aria-label="Toggle theme"
+              >
+                🌓
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero small">
+        <div class="container">
+          <h1>Projects</h1>
+          <p class="subtitle">
+            A growing collection of interactive and creative work.
+          </p>
+          <div class="hero-actions">
+            <a class="btn" href="game.html" target="_blank" rel="noopener"
+              >Open Game in New Tab</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <article class="project card">
+            <div class="project-header">
+              <div>
+                <h2>Whack‑A‑Mole Pro Edition</h2>
+                <p class="subtitle">
+                  Modern web game with animations, streaks, golden moles, and
+                  achievements.
+                </p>
+              </div>
+              <div class="project-actions">
+                <a class="btn btn-primary" href="game.html">Play Now</a>
+                <a class="btn" href="#details-wam">Details</a>
+              </div>
+            </div>
+            <div class="embed-wrap">
+              <iframe
+                title="Whack‑A‑Mole Game"
+                src="game.html"
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div id="details-wam" class="project-details">
+              <div class="chips">
+                <span class="chip">HTML5</span>
+                <span class="chip">CSS3 Animations</span>
+                <span class="chip">Vanilla JS</span>
+              </div>
+              <ul class="desc-list">
+                <li>Three difficulty modes with tuned spawn and timing.</li>
+                <li>Streak multipliers, golden moles, and end‑game stats.</li>
+                <li>
+                  Particle effects, confetti, screen shake, and progress ring.
+                </li>
+                <li>Keyboard shortcuts and full mobile touch support.</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <p class="small">© <span id="year"></span> Samuel Benardo</p>
+          <p class="small">
+            Style inspired by HW Admin UI —
+            <a
+              href="https://learnhw.web.app/admin"
+              target="_blank"
+              rel="noopener"
+              >learnhw.web.app/admin</a
+            >
+          </p>
+        </div>
+        <div class="footer-actions">
+          <a class="btn" href="index.html">About</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="site.js"></script>
+  </body>
+</html>

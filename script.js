@@ -50,12 +50,36 @@ const achievementDisplay = document.getElementById("achievement");
 const streakDisplay = document.getElementById("streak-display");
 const progressCircle = document.querySelector(".progress-ring-circle");
 const particlesContainer = document.getElementById("particles");
+const playerNameInput = document.getElementById("player-name");
+const leaderboardList = document.getElementById("leaderboard-list");
+const leaderboardEmpty = document.getElementById("leaderboard-empty");
 
 // Initialize
 document.addEventListener("DOMContentLoaded", () => {
   highscoreDisplay.textContent = highScore;
   setupEventListeners();
   initializeProgressRing();
+
+  // Player name (localStorage)
+  const savedName = localStorage.getItem("playerName") || "";
+  if (playerNameInput) {
+    playerNameInput.value = savedName;
+    playerNameInput.addEventListener("change", () => {
+      const v = playerNameInput.value.trim().slice(0, 20);
+      localStorage.setItem("playerName", v);
+      playerNameInput.value = v;
+    });
+  }
+
+  // Leaderboard load on consent
+  if (window.hasConsent && window.hasConsent() && window.db) {
+    loadLeaderboard();
+  }
+  window.addEventListener("consent-changed", () => {
+    if (window.hasConsent && window.hasConsent() && window.db) {
+      loadLeaderboard();
+    }
+  });
 });
 
 // Progress Ring Setup
@@ -376,6 +400,9 @@ function showGameOverModal() {
 
   gameOverModal.classList.add("show");
 
+  // Submit to leaderboard if consent is granted
+  submitScoreToFirestore();
+
   // Confetti effect if high score
   if (score === highScore && score > 0) {
     createConfetti();
@@ -653,3 +680,93 @@ document.addEventListener("keydown", (e) => {
 
 console.log("🎮 Whack-A-Mole Pro Edition loaded!");
 console.log("💡 Tip: Try the Konami code for a bonus! ⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️BA");
+
+// Leaderboard integration (consent-gated)
+async function submitScoreToFirestore() {
+  try {
+    if (!window.db || !window.hasConsent || !window.hasConsent()) return;
+
+    const name =
+      (
+        playerNameInput?.value ||
+        localStorage.getItem("playerName") ||
+        "Anonymous"
+      )
+        .trim()
+        .slice(0, 20) || "Anonymous";
+
+    const totalAttempts = hits + misses;
+    const accuracy =
+      totalAttempts > 0 ? Math.round((hits / totalAttempts) * 100) : 0;
+
+    const data = {
+      name,
+      score,
+      bestStreak,
+      accuracy,
+      difficulty,
+      // eslint-disable-next-line no-undef
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+
+    await window.db.collection("scores").add(data);
+    loadLeaderboard();
+  } catch (e) {
+    console.error("Score save failed:", e);
+  }
+}
+
+async function loadLeaderboard() {
+  try {
+    if (!window.db || !window.hasConsent || !window.hasConsent()) {
+      if (leaderboardEmpty) leaderboardEmpty.style.display = "block";
+      return;
+    }
+    if (leaderboardEmpty) leaderboardEmpty.style.display = "none";
+    if (!leaderboardList) return;
+
+    const snap = await window.db
+      .collection("scores")
+      .orderBy("score", "desc")
+      .limit(10)
+      .get();
+
+    leaderboardList.innerHTML = "";
+    let rank = 1;
+    snap.forEach((doc) => {
+      const s = doc.data();
+      const li = document.createElement("li");
+      li.style.display = "flex";
+      li.style.justifyContent = "space-between";
+      li.style.alignItems = "center";
+      li.style.padding = "10px 12px";
+      li.style.border = "1px solid rgba(255,255,255,.12)";
+      li.style.borderRadius = "12px";
+      li.style.background = "rgba(255,255,255,.05)";
+      li.innerHTML = `
+        <span style="opacity:.8;">#${rank} — ${escapeHtml(
+        s.name || "Anonymous"
+      )}</span>
+        <strong style="letter-spacing:.5px;">${s.score ?? 0}</strong>
+      `;
+      leaderboardList.appendChild(li);
+      rank++;
+    });
+  } catch (e) {
+    console.error("Leaderboard load failed:", e);
+  }
+}
+
+function escapeHtml(str) {
+  return String(str).replace(
+    /[&<>"']/g,
+    (c) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      }[c])
+  );
+}
