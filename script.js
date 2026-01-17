@@ -6,6 +6,7 @@ let gameInterval = null;
 let moleInterval = null;
 let countdownInterval = null;
 let isGameActive = false;
+let isPaused = false; // track paused vs. not-started
 let difficulty = "medium";
 let hits = 0;
 let misses = 0;
@@ -133,8 +134,13 @@ function setupEventListeners() {
 // Game Functions
 function startGame() {
   if (difficultySelector.classList.contains("hidden")) {
+    if (isPaused && !isGameActive) {
+      resumeGame();
+      return;
+    }
     if (!isGameActive) {
       isGameActive = true;
+      isPaused = false;
       score = 0;
       hits = 0;
       misses = 0;
@@ -173,10 +179,12 @@ style.textContent = `
 document.head.appendChild(style);
 
 function pauseGame() {
+  isPaused = true;
   isGameActive = false;
   clearInterval(gameInterval);
   clearInterval(moleInterval);
   clearInterval(countdownInterval);
+  countdownInterval = null;
   startBtn.innerHTML = '<span class="btn-icon">▶</span>RESUME';
   startBtn.style.background =
     "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
@@ -420,6 +428,7 @@ function playAgain() {
 
 function resetGame() {
   isGameActive = false;
+  isPaused = false;
   score = 0;
   timeLeft = 60;
   hits = 0;
@@ -446,6 +455,16 @@ function resetGame() {
 
   difficultySelector.classList.remove("hidden");
   gameBoard.classList.add("disabled");
+}
+
+function resumeGame() {
+  isPaused = false;
+  isGameActive = true;
+  startBtn.textContent = "⏸ PAUSE";
+  startBtn.style.background =
+    "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)";
+  gameInterval = setInterval(gameLoop, 100);
+  startMoleSpawning();
 }
 
 // Visual Effects
