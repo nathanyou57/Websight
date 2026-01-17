@@ -6,11 +6,30 @@ let gameInterval = null;
 let moleInterval = null;
 let countdownInterval = null;
 let isGameActive = false;
+let isPaused = false; // track paused vs. not-started
+<<<<<<< HEAD
+let isCountingDown = false;
+let isEndless = localStorage.getItem("wamEndless") === "on";
+let adaptiveEnabled = localStorage.getItem("wamAdaptive") === "on";
+let performanceMode = localStorage.getItem("wamPerformance") === "on";
+let soundEnabled = localStorage.getItem("wamSound") === "off" ? false : true;
+let hapticsEnabled =
+  localStorage.getItem("wamHaptics") === "off" ? false : true;
+let reducedMotionPref =
+  window.matchMedia &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let reducedMotion =
+  localStorage.getItem("wamReducedMotion") === "on"
+    ? true
+    : reducedMotionPref;
+=======
+>>>>>>> origin/main
 let difficulty = "medium";
 let hits = 0;
 let misses = 0;
 let currentStreak = 0;
 let bestStreak = 0;
+let audioCtx = null;
 
 // Difficulty Settings
 const difficultySettings = {
@@ -53,12 +72,27 @@ const particlesContainer = document.getElementById("particles");
 const playerNameInput = document.getElementById("player-name");
 const leaderboardList = document.getElementById("leaderboard-list");
 const leaderboardEmpty = document.getElementById("leaderboard-empty");
+const leaderboardRetry = document.getElementById("leaderboard-retry");
+const leaderboardNote = document.getElementById("leaderboard-note");
+const soundToggle = document.getElementById("sound-toggle");
+const hapticsToggle = document.getElementById("haptics-toggle");
+const performanceToggle = document.getElementById("performance-toggle");
+const helpBtn = document.getElementById("help-btn");
+const helpModal = document.getElementById("help-modal");
+const helpCloseBtn = document.getElementById("help-close-btn");
+const endlessToggle = document.getElementById("endless-toggle");
+const adaptiveToggle = document.getElementById("adaptive-toggle");
+const reducedMotionToggle = document.getElementById("reduced-motion-toggle");
+const countdownOverlay = document.getElementById("countdown-overlay");
+const countdownNumber = document.getElementById("countdown-number");
 
 // Initialize
 document.addEventListener("DOMContentLoaded", () => {
   highscoreDisplay.textContent = highScore;
   setupEventListeners();
   initializeProgressRing();
+  applyPreferenceUI();
+  updateTimer();
 
   // Player name (localStorage)
   const savedName = localStorage.getItem("playerName") || "";
@@ -71,19 +105,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Leaderboard load on consent
-  if (window.hasConsent && window.hasConsent() && window.db) {
-    loadLeaderboard();
-  }
+  // Leaderboard load (online if consent, otherwise local)
+  loadLeaderboard();
   window.addEventListener("consent-changed", () => {
-    if (window.hasConsent && window.hasConsent() && window.db) {
-      loadLeaderboard();
-    }
+    loadLeaderboard();
   });
 });
 
 // Progress Ring Setup
 function initializeProgressRing() {
+  if (!progressCircle) return;
   const radius = progressCircle.r.baseVal.value;
   const circumference = radius * 2 * Math.PI;
   progressCircle.style.strokeDasharray = `${circumference} ${circumference}`;
@@ -91,6 +122,7 @@ function initializeProgressRing() {
 }
 
 function updateProgressRing(percent) {
+  if (!progressCircle) return;
   const radius = progressCircle.r.baseVal.value;
   const circumference = radius * 2 * Math.PI;
   const offset = circumference - (percent / 100) * circumference;
@@ -102,6 +134,62 @@ function setupEventListeners() {
   startBtn.addEventListener("click", startGame);
   resetBtn.addEventListener("click", resetGame);
   playAgainBtn.addEventListener("click", playAgain);
+
+  soundToggle?.addEventListener("click", () => {
+    soundEnabled = !soundEnabled;
+    localStorage.setItem("wamSound", soundEnabled ? "on" : "off");
+    updateToggleLabel(soundToggle, soundEnabled, "🔊 Sound On", "🔇 Sound Off");
+  });
+
+  hapticsToggle?.addEventListener("click", () => {
+    hapticsEnabled = !hapticsEnabled;
+    localStorage.setItem("wamHaptics", hapticsEnabled ? "on" : "off");
+    updateToggleLabel(
+      hapticsToggle,
+      hapticsEnabled,
+      "📳 Haptics On",
+      "📴 Haptics Off"
+    );
+  });
+
+  performanceToggle?.addEventListener("click", () => {
+    performanceMode = !performanceMode;
+    localStorage.setItem("wamPerformance", performanceMode ? "on" : "off");
+    applyPerformanceMode();
+    updateToggleLabel(
+      performanceToggle,
+      performanceMode,
+      "💨 Performance On",
+      "💨 Performance Off"
+    );
+  });
+
+  helpBtn?.addEventListener("click", openHelp);
+  helpCloseBtn?.addEventListener("click", closeHelp);
+  helpModal?.addEventListener("click", (e) => {
+    if (e.target === helpModal) closeHelp();
+  });
+
+  endlessToggle?.addEventListener("change", () => {
+    isEndless = endlessToggle.checked;
+    localStorage.setItem("wamEndless", isEndless ? "on" : "off");
+    updateTimer();
+  });
+
+  adaptiveToggle?.addEventListener("change", () => {
+    adaptiveEnabled = adaptiveToggle.checked;
+    localStorage.setItem("wamAdaptive", adaptiveEnabled ? "on" : "off");
+  });
+
+  reducedMotionToggle?.addEventListener("change", () => {
+    reducedMotion = reducedMotionToggle.checked;
+    localStorage.setItem("wamReducedMotion", reducedMotion ? "on" : "off");
+    applyReducedMotion();
+  });
+
+  leaderboardRetry?.addEventListener("click", () => {
+    loadLeaderboard(true);
+  });
 
   difficultyButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -130,11 +218,67 @@ function setupEventListeners() {
   });
 }
 
+function updateToggleLabel(btn, isOn, onText, offText) {
+  if (!btn) return;
+  btn.setAttribute("aria-pressed", String(isOn));
+  btn.textContent = isOn ? onText : offText;
+}
+
+function applyPerformanceMode() {
+  document.body.classList.toggle("performance-mode", performanceMode);
+}
+
+function applyReducedMotion() {
+  document.body.classList.toggle("reduced-motion", reducedMotion);
+}
+
+function applyPreferenceUI() {
+  updateToggleLabel(soundToggle, soundEnabled, "🔊 Sound On", "🔇 Sound Off");
+  updateToggleLabel(
+    hapticsToggle,
+    hapticsEnabled,
+    "📳 Haptics On",
+    "📴 Haptics Off"
+  );
+  updateToggleLabel(
+    performanceToggle,
+    performanceMode,
+    "💨 Performance On",
+    "💨 Performance Off"
+  );
+  if (endlessToggle) endlessToggle.checked = isEndless;
+  if (adaptiveToggle) adaptiveToggle.checked = adaptiveEnabled;
+  if (reducedMotionToggle) reducedMotionToggle.checked = reducedMotion;
+  applyPerformanceMode();
+  applyReducedMotion();
+}
+
+function openHelp() {
+  if (!helpModal) return;
+  helpModal.classList.add("show");
+  helpModal.setAttribute("aria-hidden", "false");
+}
+
+function closeHelp() {
+  if (!helpModal) return;
+  helpModal.classList.remove("show");
+  helpModal.setAttribute("aria-hidden", "true");
+}
+
 // Game Functions
 function startGame() {
   if (difficultySelector.classList.contains("hidden")) {
+<<<<<<< HEAD
+    if (isCountingDown) return;
+    if (isGameActive) {
+=======
+    if (isPaused && !isGameActive) {
+      resumeGame();
+      return;
+    }
     if (!isGameActive) {
       isGameActive = true;
+      isPaused = false;
       score = 0;
       hits = 0;
       misses = 0;
@@ -150,8 +294,17 @@ function startGame() {
       gameInterval = setInterval(gameLoop, 100);
       startMoleSpawning();
     } else {
+>>>>>>> origin/main
       pauseGame();
+      return;
     }
+    if (isPaused) {
+      startCountdown(resumeGame);
+      return;
+    }
+
+    prepareNewGame();
+    startCountdown(startGameplay);
   } else {
     // Shake the difficulty selector
     difficultySelector.style.animation = "none";
@@ -172,27 +325,83 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+function prepareNewGame() {
+  isPaused = false;
+  isGameActive = false;
+  isCountingDown = false;
+  score = 0;
+  hits = 0;
+  misses = 0;
+  currentStreak = 0;
+  bestStreak = 0;
+  timeLeft = isEndless ? Infinity : 60;
+  updateScore();
+  updateTimer();
+  updateStreak();
+  holes.forEach((hole) => hole.classList.remove("up"));
+}
+
 function pauseGame() {
+  isPaused = true;
   isGameActive = false;
   clearInterval(gameInterval);
-  clearInterval(moleInterval);
+  clearTimeout(moleInterval);
   clearInterval(countdownInterval);
+  countdownInterval = null;
   startBtn.innerHTML = '<span class="btn-icon">▶</span>RESUME';
   startBtn.style.background =
     "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
 }
 
-function startMoleSpawning() {
-  const settings = difficultySettings[difficulty];
-  moleInterval = setInterval(() => {
-    if (isGameActive) {
-      showRandomMole();
-    }
-  }, settings.spawnInterval);
+function startGameplay() {
+  isPaused = false;
+  isGameActive = true;
+  startBtn.textContent = "⏸ PAUSE";
+  startBtn.style.background =
+    "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)";
+  clearInterval(gameInterval);
+  gameInterval = setInterval(gameLoop, 100);
+  startMoleSpawning();
+  playSound("start");
 }
 
-function showRandomMole() {
-  const settings = difficultySettings[difficulty];
+function resumeGame() {
+  isPaused = false;
+  isGameActive = true;
+  startBtn.textContent = "⏸ PAUSE";
+  startBtn.style.background =
+    "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)";
+  clearInterval(gameInterval);
+  gameInterval = setInterval(gameLoop, 100);
+  startMoleSpawning();
+  playSound("start");
+}
+
+function startMoleSpawning() {
+  clearTimeout(moleInterval);
+  scheduleNextMole();
+}
+
+function scheduleNextMole() {
+  if (!isGameActive) return;
+  const settings = getCurrentSettings();
+  showRandomMole(settings);
+  moleInterval = setTimeout(scheduleNextMole, settings.spawnInterval);
+}
+
+function getCurrentSettings() {
+  const base = { ...difficultySettings[difficulty] };
+  if (!adaptiveEnabled) return base;
+  const progress = Math.min(1, (hits + misses) / 120);
+  const factor = 1 - progress * 0.5; // ramps up speed up to 50%
+  return {
+    moleShowTime: Math.max(400, base.moleShowTime * factor),
+    moleHideTime: Math.max(500, base.moleHideTime * factor),
+    spawnInterval: Math.max(350, base.spawnInterval * factor),
+  };
+}
+
+function showRandomMole(settings = getCurrentSettings()) {
   const availableHoles = Array.from(holes).filter(
     (hole) => !hole.classList.contains("up")
   );
@@ -212,6 +421,7 @@ function showRandomMole() {
     moleHead.classList.add("golden");
   }
 
+  const hideDelay = settings.moleShowTime || 1000;
   setTimeout(() => {
     randomHole.classList.remove("up");
     const moleHead = randomHole.querySelector(".mole-head");
@@ -220,7 +430,75 @@ function showRandomMole() {
         "linear-gradient(135deg, #8B4513 0%, #A0522D 50%, #8B4513 100%)";
       moleHead.classList.remove("golden");
     }
-  }, settings.moleShowTime);
+  }, hideDelay);
+}
+
+function startCountdown(next) {
+  if (!countdownOverlay || !countdownNumber) {
+    next();
+    return;
+  }
+  isCountingDown = true;
+  let count = 3;
+  countdownNumber.textContent = count;
+  countdownOverlay.classList.add("show");
+  playSound("beep");
+  triggerHaptics(10);
+
+  const tick = () => {
+    if (!isCountingDown) return;
+    count -= 1;
+    if (count <= 0) {
+      countdownOverlay.classList.remove("show");
+      isCountingDown = false;
+      next();
+      return;
+    }
+    countdownNumber.textContent = count;
+    playSound("beep");
+    triggerHaptics(10);
+    setTimeout(tick, 700);
+  };
+
+  setTimeout(tick, 700);
+}
+
+function playSound(type) {
+  if (!soundEnabled || performanceMode || reducedMotion) return;
+  try {
+    if (!audioCtx) {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      audioCtx = new Ctx();
+    }
+    if (!audioCtx) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const tones = {
+      hit: 880,
+      miss: 240,
+      beep: 520,
+      start: 660,
+      end: 180,
+    };
+    const freq = tones[type] || 440;
+    const now = audioCtx.currentTime;
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(freq, now);
+    gain.gain.setValueAtTime(0.08, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now + 0.2);
+  } catch (_) {
+    // no-op: audio may be blocked
+  }
+}
+
+function triggerHaptics(duration = 20) {
+  if (!hapticsEnabled || reducedMotion || !navigator.vibrate) return;
+  navigator.vibrate(duration);
 }
 
 function whackMole(hole, event) {
@@ -246,6 +524,9 @@ function whackMole(hole, event) {
   updateScore();
   updateStreak();
 
+  playSound("hit");
+  triggerHaptics(isGolden ? 25 : 15);
+
   // Create score popup
   createScorePopup(event, points, isGolden);
 
@@ -270,6 +551,9 @@ function miss(event) {
   misses++;
   currentStreak = 0;
   updateStreak();
+
+  playSound("miss");
+  triggerHaptics(10);
 
   // Visual feedback for missing
   createParticles(event, "❌");
@@ -318,6 +602,15 @@ pulseStyle.textContent = `
 document.head.appendChild(pulseStyle);
 
 function updateTimer() {
+  if (isEndless) {
+    timerDisplay.textContent = "∞";
+    updateProgressRing(100);
+    timerDisplay.style.color = "";
+    progressCircle.style.stroke = "";
+    timerDisplay.classList.remove("low-time");
+    return;
+  }
+
   timerDisplay.textContent = timeLeft;
   const percent = (timeLeft / 60) * 100;
   updateProgressRing(percent);
@@ -326,14 +619,18 @@ function updateTimer() {
   if (timeLeft <= 10) {
     timerDisplay.style.color = "#ff4444";
     progressCircle.style.stroke = "#ff4444";
+    timerDisplay.classList.add("low-time");
   } else {
     timerDisplay.style.color = "";
     progressCircle.style.stroke = "";
+    timerDisplay.classList.remove("low-time");
   }
 }
 
 function gameLoop() {
   if (!isGameActive) return;
+
+  if (isEndless) return;
 
   if (countdownInterval === null) {
     countdownInterval = setInterval(() => {
@@ -351,10 +648,13 @@ function gameLoop() {
 
 function endGame() {
   isGameActive = false;
+  isPaused = false;
+  isCountingDown = false;
   clearInterval(gameInterval);
-  clearInterval(moleInterval);
+  clearTimeout(moleInterval);
   clearInterval(countdownInterval);
   countdownInterval = null;
+  countdownOverlay?.classList.remove("show");
 
   // Hide all moles
   holes.forEach((hole) => {
@@ -368,6 +668,7 @@ function endGame() {
 
   // Show game over modal
   showGameOverModal();
+  playSound("end");
 }
 
 function showGameOverModal() {
@@ -420,17 +721,23 @@ function playAgain() {
 
 function resetGame() {
   isGameActive = false;
+  isPaused = false;
+<<<<<<< HEAD
+  isCountingDown = false;
+=======
+>>>>>>> origin/main
   score = 0;
-  timeLeft = 60;
+  timeLeft = isEndless ? Infinity : 60;
   hits = 0;
   misses = 0;
   currentStreak = 0;
   bestStreak = 0;
 
   clearInterval(gameInterval);
-  clearInterval(moleInterval);
+  clearTimeout(moleInterval);
   clearInterval(countdownInterval);
   countdownInterval = null;
+  countdownOverlay?.classList.remove("show");
 
   updateScore();
   updateTimer();
@@ -448,8 +755,23 @@ function resetGame() {
   gameBoard.classList.add("disabled");
 }
 
+function resumeGame() {
+  isPaused = false;
+  isGameActive = true;
+  startBtn.textContent = "⏸ PAUSE";
+  startBtn.style.background =
+    "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)";
+  gameInterval = setInterval(gameLoop, 100);
+  startMoleSpawning();
+}
+
 // Visual Effects
+function effectsDisabled() {
+  return performanceMode || reducedMotion;
+}
+
 function createScorePopup(event, points, isGolden) {
+  if (effectsDisabled()) return;
   const popup = document.createElement("div");
   popup.className = "score-popup";
   popup.textContent = `+${points}`;
@@ -469,6 +791,7 @@ function createScorePopup(event, points, isGolden) {
 }
 
 function createParticles(event, emoji) {
+  if (effectsDisabled() || !particlesContainer) return;
   const particleCount = 8;
 
   for (let i = 0; i < particleCount; i++) {
@@ -520,6 +843,7 @@ particleStyle.textContent = `
 document.head.appendChild(particleStyle);
 
 function shakeScreen() {
+  if (effectsDisabled()) return;
   document.body.style.animation = "none";
   setTimeout(() => {
     document.body.style.animation = "screenShake 0.2s ease";
@@ -538,6 +862,7 @@ shakeScreenStyle.textContent = `
 document.head.appendChild(shakeScreenStyle);
 
 function createConfetti() {
+  if (effectsDisabled() || !particlesContainer) return;
   const confettiCount = 100;
   const confettiEmojis = ["🎉", "🎊", "⭐", "✨", "💫", "🌟"];
 
@@ -588,6 +913,7 @@ document.head.appendChild(confettiStyle);
 document.addEventListener("keydown", (e) => {
   if (e.code === "Space") {
     e.preventDefault();
+    if (helpModal?.classList.contains("show")) return;
     if (!isGameActive && !difficultySelector.classList.contains("hidden")) {
       // Don't start if difficulty not selected
       return;
@@ -599,6 +925,10 @@ document.addEventListener("keydown", (e) => {
 
   if (e.code === "KeyR") {
     resetBtn.click();
+  }
+
+  if (e.key === "Escape" && helpModal?.classList.contains("show")) {
+    closeHelp();
   }
 });
 
@@ -684,8 +1014,6 @@ console.log("💡 Tip: Try the Konami code for a bonus! ⬆️⬆️⬇️⬇️
 // Leaderboard integration (consent-gated)
 async function submitScoreToFirestore() {
   try {
-    if (!window.db || !window.hasConsent || !window.hasConsent()) return;
-
     const name =
       (
         playerNameInput?.value ||
@@ -699,30 +1027,54 @@ async function submitScoreToFirestore() {
     const accuracy =
       totalAttempts > 0 ? Math.round((hits / totalAttempts) * 100) : 0;
 
-    const data = {
+    const entry = {
       name,
       score,
       bestStreak,
       accuracy,
       difficulty,
-      // eslint-disable-next-line no-undef
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      createdAt: Date.now(),
     };
 
-    await window.db.collection("scores").add(data);
+    const canUseCloud = window.db && window.hasConsent && window.hasConsent();
+
+    if (!canUseCloud) {
+      saveLocalScore(entry);
+      renderLocalLeaderboard();
+      return;
+    }
+
+    // eslint-disable-next-line no-undef
+    entry.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+
+    await window.db.collection("scores").add(entry);
     loadLeaderboard();
   } catch (e) {
     console.error("Score save failed:", e);
+    saveLocalScore({
+      name: "Offline",
+      score,
+      bestStreak,
+      accuracy:
+        hits + misses > 0 ? Math.round((hits / (hits + misses)) * 100) : 0,
+      difficulty,
+      createdAt: Date.now(),
+    });
+    renderLocalLeaderboard();
   }
 }
 
-async function loadLeaderboard() {
+async function loadLeaderboard(forceRetry = false) {
   try {
-    if (!window.db || !window.hasConsent || !window.hasConsent()) {
-      if (leaderboardEmpty) leaderboardEmpty.style.display = "block";
+    const canUseCloud = window.db && window.hasConsent && window.hasConsent();
+    if (!canUseCloud) {
+      renderLocalLeaderboard(
+        forceRetry
+          ? "Still offline or cookies declined — showing local scores."
+          : "Cookies declined/offline — showing local scores only."
+      );
       return;
     }
-    if (leaderboardEmpty) leaderboardEmpty.style.display = "none";
     if (!leaderboardList) return;
 
     const snap = await window.db
@@ -752,8 +1104,16 @@ async function loadLeaderboard() {
       leaderboardList.appendChild(li);
       rank++;
     });
+    updateLeaderboardEmpty(snap.empty);
+    setLeaderboardMessage(
+      snap.empty
+        ? "No scores yet. Play to be first on the board!"
+        : "Global leaderboard (enable cookies and online access)."
+    );
+    setLeaderboardNote("Online leaderboard (requires cookies)");
   } catch (e) {
     console.error("Leaderboard load failed:", e);
+    renderLocalLeaderboard("Offline fallback — local scores only.");
   }
 }
 
@@ -769,4 +1129,66 @@ function escapeHtml(str) {
         "'": "&#39;",
       }[c])
   );
+}
+
+function saveLocalScore(entry) {
+  const list = getLocalScores();
+  list.push(entry);
+  list.sort((a, b) => (b.score || 0) - (a.score || 0));
+  localStorage.setItem("wamLocalScores", JSON.stringify(list.slice(0, 10)));
+}
+
+function getLocalScores() {
+  try {
+    return JSON.parse(localStorage.getItem("wamLocalScores")) || [];
+  } catch (_) {
+    return [];
+  }
+}
+
+function renderLocalLeaderboard(noteText = "") {
+  if (!leaderboardList) return;
+  const list = getLocalScores();
+  leaderboardList.innerHTML = "";
+  let rank = 1;
+  list.forEach((s) => {
+    const li = document.createElement("li");
+    li.style.display = "flex";
+    li.style.justifyContent = "space-between";
+    li.style.alignItems = "center";
+    li.style.padding = "10px 12px";
+    li.style.border = "1px solid rgba(255,255,255,.12)";
+    li.style.borderRadius = "12px";
+    li.style.background = "rgba(255,255,255,.05)";
+    li.innerHTML = `
+      <span style="opacity:.8;">#${rank} — ${escapeHtml(
+        s.name || "Anonymous"
+      )}</span>
+      <strong style="letter-spacing:.5px;">${s.score ?? 0}</strong>
+    `;
+    leaderboardList.appendChild(li);
+    rank++;
+  });
+  if (list.length === 0) {
+    setLeaderboardMessage("No local scores yet. Play a round to add one!");
+  }
+  updateLeaderboardEmpty(list.length === 0);
+  setLeaderboardNote(
+    noteText || "Local scores only (enable cookies for global leaderboard)."
+  );
+}
+
+function updateLeaderboardEmpty(isEmpty) {
+  if (!leaderboardEmpty) return;
+  leaderboardEmpty.style.display = isEmpty ? "block" : "none";
+}
+
+function setLeaderboardNote(text) {
+  if (!leaderboardNote) return;
+  leaderboardNote.textContent = text || "";
+}
+
+function setLeaderboardMessage(text) {
+  if (!leaderboardEmpty) return;
+  leaderboardEmpty.textContent = text;
 }
