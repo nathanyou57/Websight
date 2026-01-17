@@ -7,6 +7,7 @@ let moleInterval = null;
 let countdownInterval = null;
 let isGameActive = false;
 let isPaused = false; // track paused vs. not-started
+<<<<<<< HEAD
 let isCountingDown = false;
 let isEndless = localStorage.getItem("wamEndless") === "on";
 let adaptiveEnabled = localStorage.getItem("wamAdaptive") === "on";
@@ -21,6 +22,8 @@ let reducedMotion =
   localStorage.getItem("wamReducedMotion") === "on"
     ? true
     : reducedMotionPref;
+=======
+>>>>>>> origin/main
 let difficulty = "medium";
 let hits = 0;
 let misses = 0;
@@ -265,8 +268,33 @@ function closeHelp() {
 // Game Functions
 function startGame() {
   if (difficultySelector.classList.contains("hidden")) {
+<<<<<<< HEAD
     if (isCountingDown) return;
     if (isGameActive) {
+=======
+    if (isPaused && !isGameActive) {
+      resumeGame();
+      return;
+    }
+    if (!isGameActive) {
+      isGameActive = true;
+      isPaused = false;
+      score = 0;
+      hits = 0;
+      misses = 0;
+      currentStreak = 0;
+      bestStreak = 0;
+      timeLeft = 60;
+      updateScore();
+      updateTimer();
+      startBtn.textContent = "⏸ PAUSE";
+      startBtn.style.background =
+        "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)";
+
+      gameInterval = setInterval(gameLoop, 100);
+      startMoleSpawning();
+    } else {
+>>>>>>> origin/main
       pauseGame();
       return;
     }
@@ -694,7 +722,10 @@ function playAgain() {
 function resetGame() {
   isGameActive = false;
   isPaused = false;
+<<<<<<< HEAD
   isCountingDown = false;
+=======
+>>>>>>> origin/main
   score = 0;
   timeLeft = isEndless ? Infinity : 60;
   hits = 0;
@@ -722,6 +753,16 @@ function resetGame() {
 
   difficultySelector.classList.remove("hidden");
   gameBoard.classList.add("disabled");
+}
+
+function resumeGame() {
+  isPaused = false;
+  isGameActive = true;
+  startBtn.textContent = "⏸ PAUSE";
+  startBtn.style.background =
+    "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)";
+  gameInterval = setInterval(gameLoop, 100);
+  startMoleSpawning();
 }
 
 // Visual Effects
